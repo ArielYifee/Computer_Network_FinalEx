@@ -10,3 +10,6 @@ for i in range(1,300):
         b = ICMP()
         send(a/b)
         time.sleep(1)
+#to run
+#sudo chmod a+x 1.3.py
+#sudo python3 1.3.py

@@ -6,3 +6,6 @@ a.src = '105.105.105.105' #fake ip
 b = ICMP()
 p = a/b
 send(p)
+#to run
+#sudo chmod a+x 1.2.py
+#sudo python3 1.2.py
