@@ -159,9 +159,7 @@ return;
 /*
  * print packet payload data (avoid printing binary data)
  */
-void
-print_payload(const u_char *payload, int len)
-{
+void print_payload(const u_char *payload, int len){
 
 	int len_rem = len;
 	int line_width = 16;			/* number of bytes per line */
@@ -204,9 +202,7 @@ return;
 /*
  * dissect/print packet
  */
-void
-got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
-{
+void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet){
 
 	static int count = 1;                   /* packet counter */
 	

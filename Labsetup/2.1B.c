@@ -39,12 +39,15 @@ int main(){
   char interface [] = "enp0s3";
   char errorMSG[PCAP_ERRBUF_SIZE];
   struct bpf_program bpf;
+
   char filter[] = "ip proto icmp";
+  char filter_icmp[] = "icmp and dst host 216.58.198.11 and src host 10.0.2.15";
+  char filter_tcp[] = "tcp and dst protrange 10-100";
   bpf_u_int32 netMask;
   int timeOutMS = 1000;
   int promiscuous = 1;
   int optimized = 0;
-  int cnt = -1;
+  int ctn = -1;
 
   /**
    * Listening to a specific interface that we will define
@@ -54,7 +57,7 @@ int main(){
    * @param: promiscuous - Defining whether the traffic will pass through us
    * @param: timeOutMS - Time to read until the fact dies
    * @param: error - Pointer to string for perception of error
-   * @return: pointer if success, NULL if failure
+   * @return: 0 if success, PCAP_ERROR if failure
    * to run on another machine, the interface must be changed.
   */
   session = pcap_open_live(interface, BUFSIZ, promiscuous, timeOutMS, errorMSG);
@@ -72,13 +75,13 @@ int main(){
      * @param: netMask - the network mask of the network to which the filter applies
      * @return: 0 if success, PCAP_ERROR if failure
     */ 
-    pcap_compile(session, &bpf, filter, optimized, netMask);
+    pcap_compile(session, &bpf, filter_tcp, optimized, netMask);
     /**
      * Setting a program filter
      * @param: session - The session from pcap_open_live
      * @param: &bpf - pointer to where we will store the version of our filter
      * @return: 0 if success, PCAP_ERROR if failure
-     */ 
+    */ 
     pcap_setfilter(session, &bpf);
     /**
      * That processes capture packages captured live or saveFile until the cnt package processors move
@@ -88,12 +91,12 @@ int main(){
      * @param: NULL - pointer for the user
      * @return: 0 If cnt is exhausted or if while reading from "Save" no more packages are available.
      * It returns PCAP_ERROR if an error occurs or PCAP_ERROR_BREAK if the loop ended due to a call to pcap_breakloop () before any packages were processed.
-     */
+    */
     
-    if(pcap_loop(session, cnt, getInformationAboutPacket, NULL) != 0){
+    if(pcap_loop(session, ctn, getInformationAboutPacket, NULL) != 0){
       /**
-     * Close the session
-     */
+       * Close the session
+      */
       pcap_close(session);
     }else{
       printf("error msg in pcap_setfilter = %s" ,errorMSG);
@@ -104,3 +107,6 @@ int main(){
 
 // gcc -o sniff sniffShowIP.c -lpcap
 // sudo ./sniff
+// telnet 8.8.8.8 
+// ping 216.58.198.11
+
