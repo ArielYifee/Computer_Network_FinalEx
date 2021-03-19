@@ -1,8 +1,0 @@
-sudo chmod a+x 1.3.py
-
-
-
-
-
-
-
